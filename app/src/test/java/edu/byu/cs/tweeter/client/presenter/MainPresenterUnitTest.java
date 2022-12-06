@@ -3,11 +3,18 @@ package edu.byu.cs.tweeter.client.presenter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
+import edu.byu.cs.tweeter.client.backgroundTask.LoginTask;
 import edu.byu.cs.tweeter.client.user.service.StatusService;
+import edu.byu.cs.tweeter.client.user.service.UserService;
+import edu.byu.cs.tweeter.model.domain.AuthToken;
+import edu.byu.cs.tweeter.model.domain.User;
+import edu.byu.cs.tweeter.model.net.request.LoginRequest;
+import edu.byu.cs.tweeter.model.net.response.LoginResponse;
 
 public class MainPresenterUnitTest {
     private MainPresenter.View mockView;
@@ -36,43 +43,41 @@ public class MainPresenterUnitTest {
                 return null;
             }
         };
-
-
     }
 
-    @Test
-    public void testPost_Failure() {
-
-        Answer<Void> answer = new Answer<>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                StatusService.PostObserver observer = invocation.getArgument(2,
-                        StatusService.PostObserver.class);
-                observer.handleFailure("post failed");
-
-                Mockito.verify(mockView).displayMessage("post failed");
-                verifyFunctionality(this, "post failed");
-
-                return null;
-            }
-        };
-
-    }
-
-    @Test
-    public void testPost_Exception() {
-        Answer<Void> answer = new Answer<>() {
-            @Override
-            public Void answer(InvocationOnMock invocation) throws Throwable {
-                StatusService.PostObserver observer = invocation.getArgument(2,
-                        StatusService.PostObserver.class);
-                observer.handleException(new Exception("exception thrown"));
-                verifyFunctionality(this, "Failed to post status because of exception: exception thrown");
-//                Assertions.assertEquals(mockStatusService.);
-                return null;
-            }
-        };
-    }
+//    @Test
+//    public void testPost_Failure() {
+//
+//        Answer<Void> answer = new Answer<>() {
+//            @Override
+//            public Void answer(InvocationOnMock invocation) throws Throwable {
+//                StatusService.PostObserver observer = invocation.getArgument(2,
+//                        StatusService.PostObserver.class);
+//                observer.handleFailure("post failed");
+//
+//                Mockito.verify(mockView).displayMessage("post failed");
+//                verifyFunctionality(this, "post failed");
+//
+//                return null;
+//            }
+//        };
+//
+//    }
+//
+//    @Test
+//    public void testPost_Exception() {
+//        Answer<Void> answer = new Answer<>() {
+//            @Override
+//            public Void answer(InvocationOnMock invocation) throws Throwable {
+//                StatusService.PostObserver observer = invocation.getArgument(2,
+//                        StatusService.PostObserver.class);
+//                observer.handleException(new Exception("exception thrown"));
+//                verifyFunctionality(this, "Failed to post status because of exception: exception thrown");
+////                Assertions.assertEquals(mockStatusService.);
+//                return null;
+//            }
+//        };
+//    }
 
     private void verifyFunctionality(Answer<Void> answer, String message) {
         mainPresenterSpy.initiatePost("post");

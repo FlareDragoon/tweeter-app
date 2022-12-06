@@ -7,7 +7,14 @@ import edu.byu.cs.tweeter.model.domain.User;
 
 public class StoryPresenter extends PagedPresenter<Status> {
 
-    private StatusService service = new StatusService();
+    private StatusService service;
+
+    public StatusService getStatusService() {
+        if (service == null) {
+            service = new StatusService();
+        }
+        return service;
+    }
 
     public StoryPresenter(View view) {
         this.view = view;
@@ -16,7 +23,7 @@ public class StoryPresenter extends PagedPresenter<Status> {
     @Override
     public void loadMoreElements(User user) {
         setLoadingFlags(true);
-        service.loadMoreStory(Cache.getInstance().getCurrUserAuthToken(), user, PAGE_SIZE,
+        getStatusService().loadMoreStory(Cache.getInstance().getCurrUserAuthToken(), user, PAGE_SIZE,
                 lastElement, new StatusListObserver());
     }
 

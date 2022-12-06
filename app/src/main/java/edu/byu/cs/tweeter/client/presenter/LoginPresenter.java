@@ -6,8 +6,17 @@ import edu.byu.cs.tweeter.model.domain.AuthToken;
 import edu.byu.cs.tweeter.model.domain.User;
 
 public class LoginPresenter extends LoginAndRegisterPresenter implements LoginAndRegisterObserver {
+    private UserService service;
+
     public LoginPresenter(View view) {
         this.view = view;
+    }
+
+    public UserService getUserService() {
+        if (service == null) {
+            service = new UserService();
+        }
+        return service;
     }
 
     public void initiateLogin(String username, String password) {
@@ -15,7 +24,7 @@ public class LoginPresenter extends LoginAndRegisterPresenter implements LoginAn
 
         if (message == null) {
             displaySuccessMessage();
-            new UserService().login(username, password, this);
+            getUserService().login(username, password, this);
         } else {
             failure(message, view);
         }
